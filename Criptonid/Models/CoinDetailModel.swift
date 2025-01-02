@@ -1,8 +1,8 @@
 //
 //  CoinDetailModel.swift
-//  SwiftfulCrypto
+//  Criptonid
 //
-//  Created by Nick Sarno on 5/11/21.
+//  Created by Roman Bigun on 01.01.2025.
 //
 
 import Foundation

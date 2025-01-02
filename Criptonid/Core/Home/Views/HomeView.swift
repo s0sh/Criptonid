@@ -11,7 +11,8 @@ struct HomeView: View {
     
     @EnvironmentObject private var vm: HomeViewModel
     
-    @State private var showPortfolio = false
+    @State private var showPortfolio = false // Animate right
+    @State private var showPortfolioView = false // Show new sheet
     
     var body: some View {
         
@@ -20,11 +21,20 @@ struct HomeView: View {
             //MARK: - Background layer
             Color.theme.background
                 .ignoresSafeArea()
+                .sheet(isPresented: $showPortfolioView) {
+                    PortfolioView()
+                }
             
             //MARK: - Content layer
             VStack {
                 
                 homeHeader
+                
+                HomeStatsView(showPortfolio: $showPortfolio)
+                    .padding(.top, 10)
+                
+                SearchBarView(searchText: $vm.searchText)
+                    
                 
                 columnTitles
                 
@@ -57,6 +67,11 @@ extension HomeView {
         HStack {
             CircleButton(iconName: showPortfolio ? "plus" : "info")
                 .animation(.none)
+                .onTapGesture {
+                    if showPortfolio {
+                        showPortfolioView.toggle()
+                    }
+                }
                 .background(
                     CircleButtonAnimationView(animate: $showPortfolio)
                 )
@@ -89,7 +104,7 @@ extension HomeView {
     
     private var coinsPortfolioList: some View {
         List {
-            ForEach(vm.allCoins) { coin in
+            ForEach(vm.portfolioCoins) { coin in
                 CoinRowView(coin: coin, showHoldingsColumn: true)
             }
         }
