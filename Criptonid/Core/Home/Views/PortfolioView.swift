@@ -23,7 +23,7 @@ struct PortfolioView: View {
                     SearchBarView(searchText: $vm.searchText)
                     
                     logoList
-                    
+ 
                     if selectedCoin != nil {
                         portfolioInputSection
                     }
@@ -57,7 +57,7 @@ extension PortfolioView {
     private var logoList: some View {
         ScrollView(.horizontal, showsIndicators: false, content: {
             LazyHStack(spacing: 10) {
-                ForEach(vm.allCoins) { coin in
+                ForEach(vm.searchText.isEmpty ? vm.portfolioCoins : vm.allCoins) { coin in
                     CoinLogoView(coin: coin)
                         .frame(width: 75)
                         .padding(6)

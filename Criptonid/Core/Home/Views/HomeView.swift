@@ -28,24 +28,34 @@ struct HomeView: View {
             //MARK: - Content layer
             VStack {
                 
+                // Header
                 homeHeader
                 
+                // Statistic views
                 HomeStatsView(showPortfolio: $showPortfolio)
                     .padding(.top, 10)
-                
+                // Search bar
                 SearchBarView(searchText: $vm.searchText)
                     
-                
+                // Titles
                 columnTitles
                 
+                // Right transition
                 if !showPortfolio {
                     allCoinsList
                         .transition(.move(edge: .leading))
+                        .refreshable {
+                        vm.refreshData()
+                    }
                 }
                 
+                // left transition. show portfolio
                 if showPortfolio {
                     coinsPortfolioList
                         .transition(.move(edge: .trailing))
+                        .refreshable {
+                        vm.refreshData()
+                    }
                 }
                 
                 Spacer(minLength: 0)

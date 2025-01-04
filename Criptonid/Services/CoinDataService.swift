@@ -33,4 +33,8 @@ class CoinDataService {
             })
             
     }
+    
+    func refreshData() {
+        getCoins()
+    }
 }

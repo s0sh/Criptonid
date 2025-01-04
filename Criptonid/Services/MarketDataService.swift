@@ -31,4 +31,8 @@ final class MarketDataService: ObservableObject {
                 self?.marketDataSubscription?.cancel()
             })
     }
+    
+    func refreshData() {
+        getData()
+    }
 }
