@@ -13,6 +13,8 @@ struct HomeView: View {
     
     @State private var showPortfolio = false // Animate right
     @State private var showPortfolioView = false // Show new sheet
+    @State private var selectedCoin: CoinModel?
+    @State private var showDetailsView = false
     
     var body: some View {
         
@@ -61,6 +63,11 @@ struct HomeView: View {
                 Spacer(minLength: 0)
             }
         }
+        .background (
+            NavigationLink(destination: DetailLoadingView(coin: $selectedCoin),
+                           isActive: $showDetailsView,
+                           label: { EmptyView() })
+        )
     }
 }
 
@@ -106,7 +113,15 @@ extension HomeView {
     private var allCoinsList: some View {
         List {
             ForEach(vm.allCoins) { coin in
-                CoinRowView(coin: coin, showHoldingsColumn: false)
+                    CoinRowView(coin: coin, showHoldingsColumn: false)
+                        .listRowInsets(.init(top: 10,
+                                             leading: 0,
+                                             bottom: 10,
+                                             trailing: 10))
+                        .onTapGesture {
+                            segue(coin: coin)
+                        }
+
             }
         }
         .listStyle(PlainListStyle())
@@ -116,9 +131,22 @@ extension HomeView {
         List {
             ForEach(vm.portfolioCoins) { coin in
                 CoinRowView(coin: coin, showHoldingsColumn: true)
+                    .listRowInsets(.init(top: 10,
+                                         leading: 0,
+                                         bottom: 10,
+                                         trailing: 10))
+                    .onTapGesture {
+                        segue(coin: coin)
+                    }
             }
         }
         .listStyle(PlainListStyle())
+    }
+    
+    
+    private func segue(coin: CoinModel) {
+        selectedCoin = coin
+        showDetailsView.toggle()
     }
     
     private var columnTitles: some View {
@@ -130,7 +158,9 @@ extension HomeView {
                     .rotationEffect(Angle(degrees: vm.sortOption == .rank ? 0 : 180))
             }
             .onTapGesture {
-                vm.sortOption = (vm.sortOption == .rank ? .rankReversed : .rank)
+                withAnimation(.default) {
+                    vm.sortOption = (vm.sortOption == .rank ? .rankReversed : .rank)
+                }
             }
             
             Spacer()
@@ -143,7 +173,9 @@ extension HomeView {
                         .rotationEffect(Angle(degrees: vm.sortOption == .holdings ? 0 : 180))
                 }
                 .onTapGesture {
-                    vm.sortOption = (vm.sortOption == .holdings ? .holdingReversed : .holdings)
+                    withAnimation(.default) {
+                        vm.sortOption = (vm.sortOption == .holdings ? .holdingReversed : .holdings)
+                    }
                 }
             }
             
@@ -155,7 +187,9 @@ extension HomeView {
             }
             .frame(width: UIScreen.main.bounds.width / 3.5, alignment: .trailing)
             .onTapGesture {
-                vm.sortOption = (vm.sortOption == .price ? .priceReversed : .price)
+                withAnimation(.default) {
+                    vm.sortOption = (vm.sortOption == .price ? .priceReversed : .price)
+                }
             }
         }
         .padding(.horizontal)
