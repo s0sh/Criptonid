@@ -41,43 +41,22 @@ struct DetailView: View {
                 VStack(spacing: 20) {
                     Text("")
                         .frame(height: 150)
-                    Text("Overview")
-                        .font(.title)
-                        .bold()
-                        .foregroundColor(Color.theme.accent)
-                        .frame(maxWidth: .infinity, alignment: .leading)
+                    
+                    overviewTitle
                     Divider()
-                    
-                    LazyVGrid(columns: columns,
-                              alignment: .leading,
-                              spacing: spacing,
-                              pinnedViews: []) {
-                        ForEach(0..<6) { _ in
-                            StatisticView(stat: StatisticModel(title: "Title", value: "Value"))
-                        }
-                    }
-                    
-                    Text("Additional details")
-                        .font(.title)
-                        .bold()
-                        .foregroundColor(Color.theme.accent)
-                        .frame(maxWidth: .infinity, alignment: .leading)
+                    overviewGrid
+                    additionalInfoTitle
                     Divider()
-                    
-                    LazyVGrid(columns: columns,
-                              alignment: .leading,
-                              spacing: spacing,
-                              pinnedViews: []) {
-                        ForEach(0..<6) { _ in
-                            StatisticView(stat: StatisticModel(title: "Title", value: "Value"))
-                        }
-                    }
-                    
+                    additionalGrid
                 }
                 .padding()
-                
             }
             .navigationTitle(vm.coin.name)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    navigationBarTrailingItems
+                }
+            }
         }
     }
 }
@@ -85,5 +64,54 @@ struct DetailView: View {
 #Preview {
     NavigationStack {
         DetailView(coin: DeveloperPreview.instance.coin)
+    }
+}
+
+extension DetailView {
+    private var navigationBarTrailingItems: some View {
+        HStack {
+            Text(vm.coin.symbol.uppercased())
+                .font(.headline)
+                .foregroundColor(Color.theme.secondaryText)
+            CoinImageView(coin: vm.coin)
+                .frame(width: 25, height: 25)
+        }
+    }
+    private var overviewTitle: some View {
+        Text("Overview")
+            .font(.title)
+            .bold()
+            .foregroundColor(Color.theme.accent)
+            .frame(maxWidth: .infinity, alignment: .leading)
+    }
+    
+    private var additionalInfoTitle: some View {
+        Text("Additional details")
+            .font(.title)
+            .bold()
+            .foregroundColor(Color.theme.accent)
+            .frame(maxWidth: .infinity, alignment: .leading)
+    }
+    
+    private var overviewGrid: some View {
+        LazyVGrid(columns: columns,
+                  alignment: .leading,
+                  spacing: spacing,
+                  pinnedViews: []) {
+            ForEach(vm.overviewStatistics) { stat in
+                StatisticView(stat: stat)
+            }
+        }
+    }
+    
+    private var additionalGrid: some View {
+        LazyVGrid(columns: columns,
+                  alignment: .leading,
+                  spacing: spacing,
+                  pinnedViews: []) {
+            ForEach(vm.additionalStatistics) { stat in
+                StatisticView(stat: stat)
+            }
+        }
     }
 }
