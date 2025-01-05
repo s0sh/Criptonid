@@ -1,6 +1,6 @@
 # CRIPTONID
 # Swift/SwiftUI/MVVM/Combine [iPhone/iPad]
-# Crypto Coins realtime Information. 
+# Crypto Coins realtime monitor. 
 
 - Load realtime cripto coins data
 - Create portfolio
