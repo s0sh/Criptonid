@@ -13,6 +13,7 @@ struct HomeView: View {
     
     @State private var showPortfolio = false // Animate right
     @State private var showPortfolioView = false // Show new sheet
+    @State private var showInfoView = false
     @State private var selectedCoin: CoinModel?
     @State private var showDetailsView = false
     
@@ -25,6 +26,9 @@ struct HomeView: View {
                 .ignoresSafeArea()
                 .sheet(isPresented: $showPortfolioView) {
                     PortfolioView()
+                }
+                .sheet(isPresented: $showInfoView) {
+                    SettingsView()
                 }
             
             //MARK: - Content layer
@@ -87,6 +91,9 @@ extension HomeView {
                 .onTapGesture {
                     if showPortfolio {
                         showPortfolioView.toggle()
+                    }
+                    else {
+                        showInfoView.toggle()
                     }
                 }
                 .background(
